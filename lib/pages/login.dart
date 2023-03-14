@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,7 +31,9 @@ class _LoginState extends State<Login> {
     String check = checkCredits();
 
     if (check == 'PASSWORD') {
-      return 'PASSWORD';
+    if (kDebugMode) {
+      print("PASSWORD");
+    }
     } else if (check == 'IDD') {
       return 'IDD';
     }
@@ -51,7 +54,9 @@ class _LoginState extends State<Login> {
   void printToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String myData = prefs.getString('nordlund_token') ?? 'NO_TOKEN';
-    print(myData);
+    if (kDebugMode) {
+      print(myData);
+    }
   }
 
   @override
