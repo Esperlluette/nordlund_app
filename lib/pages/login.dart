@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:nordlund_dev/pages/admin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/api/Api.dart';
@@ -27,28 +30,49 @@ class _LoginState extends State<Login> {
     return 'PASS';
   }
 
+  bool testData() {
+    /**
+     * _data != null
+     * _data is a [String]
+     */
+
+    if (_data == null) return false;
+    if (_data.runtimeType != Map<String, dynamic>) return false;
+    return true;
+  }
+
   Future<String> connect() async {
     String check = checkCredits();
 
     if (check == 'PASSWORD') {
-    if (kDebugMode) {
-      print("PASSWORD");
-    }
+      return 'PASSORD';
     } else if (check == 'IDD') {
       return 'IDD';
     }
 
-    await Api.token(login as String, password as String);
+    if (kDebugMode) {
+      print(
+          '\n ---CHECK: $check \n ---LOGIN: $login \n ---PASSWORD: $password');
+    }
 
-    if (_data.containsKey("token")) {
+    _data = await Api.token(login as String, password as String);
+
+    if (testData()) {}
+
+    print("\n ---DATA: ${_data.runtimeType}");
+
+    if (testData()) return 'NO_DATA';
+
+    if (_data['token'] != null) {
       return 'GOT_TOKEN';
-    } 
-      return 'NO_TOKEN';
+    }
+    return 'NO_TOKEN';
   }
 
   Future<void> saveToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('nordlund_token', _data['token']);
+    await prefs.setString('login', login as String);
   }
 
   void printToken() async {
@@ -65,7 +89,7 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         title: const Text("Connexion"),
       ),
-      body:  Center(
+      body: Center(
         child: Column(
           children: [
             TextField(
@@ -76,8 +100,8 @@ class _LoginState extends State<Login> {
                 }),
             TextField(
               obscureText: true,
-              decoration: const InputDecoration(
-                  hintText: 'Entrez votre mot de passe.'),
+              decoration:
+                  const InputDecoration(hintText: 'Entrez votre mot de passe.'),
               onChanged: (text) {
                 password = text;
               },
@@ -85,12 +109,17 @@ class _LoginState extends State<Login> {
             ElevatedButton(
                 onPressed: () async {
                   var response = await connect();
-                  if (response == 'NO_TOKEN') {
-                    print("NO_TOKEN");
+                  if (response != 'GOT_TOKEN') {
+                    print("response : $response");
                   } else {
                     await saveToken();
                     printToken();
                   }
+
+                  Navigator.push(
+                      (context),
+                      MaterialPageRoute(
+                          builder: (context) => const AdminPage()));
                 },
                 child: const Text("Se connecter"))
           ],
