@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:nordlund_dev/pages/contact.dart';
 import 'package:nordlund_dev/pages/login.dart';
@@ -13,11 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '',
+      debugShowCheckedModeBanner: true,
+      title: 'Nordlund-dev',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Nordlund-dev'),
+      home: const SplashScreen(),
     );
   }
 }
@@ -28,6 +31,29 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
+}
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => SplashScreenState();
+}
+
+class SplashScreenState extends State<SplashScreen> {
+
+  @override
+  void initState(){
+    super.initState();
+    Timer(const Duration(seconds: 3), () => {Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const MyHomePage(title: 'Nordlund-dev'))) });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Image.asset('assets/images/NordLund_logo.png'),
+    );
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
