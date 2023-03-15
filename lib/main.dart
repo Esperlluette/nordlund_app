@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nordlund_dev/pages/contact.dart';
 import 'package:nordlund_dev/pages/login.dart';
 
 void main() {
@@ -37,19 +38,23 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-                onPressed: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Login()))
-                    },
-                child: const Text("Connexion"))
-          ],
-        ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          ElevatedButton(
+              onPressed: () => {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const Login()))
+                  },
+              child: const Text("Connexion")),
+          const Padding(padding: EdgeInsets.only(top: 6)),
+          ElevatedButton(
+              onPressed: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Contact()))
+                  },
+              child: const Text('Contact'))
+        ]),
       ),
     );
   }
