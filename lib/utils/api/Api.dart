@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
@@ -13,7 +14,7 @@ class Api {
           'Content-Type': 'application/json'
         },
         body: convert.jsonEncode(<String, String>{
-          'email': login,
+          'username': login,
           'password': password,
         }));
     try {
@@ -32,16 +33,6 @@ class Api {
       String description, String type) async {
     const String uri = 'https://s3-4013.nuage-peda.fr/website/public/api';
 
-    var fetchedMap = getContactType(type);
-
-    Map<String, String> convertedMap = {};
-
-    await fetchedMap.then((map) {
-      map.forEach((key, value) {
-        convertedMap[key] = value.toString();
-      });
-    });
-
     var response = await http.post(Uri.parse("$uri/contacts"),
         headers: <String, String>{
           'accept': 'application/json',
@@ -52,7 +43,7 @@ class Api {
           "email": email,
           "phone": phone,
           "description": description,
-          "type": convertedMap
+          "type": "/website/public/api/contact_types/$type"
         }));
 
     try {
@@ -70,10 +61,9 @@ class Api {
         headers: <String, String>{'accept': 'application/json'});
     try {
       var decode = convert.jsonDecode(response.body);
-      print(decode);
       return decode;
     } catch (e) {
-      print('object');
+      print(e);
     }
 
     return {'ERROR': 'CODE'};

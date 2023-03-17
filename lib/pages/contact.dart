@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../component/contactForm.dart';
+import '../component/ContactForm.dart';
 
 class Contact extends StatefulWidget {
   const Contact({super.key});

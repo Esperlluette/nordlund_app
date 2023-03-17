@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:nordlund_dev/pages/contact.dart';
-import 'package:nordlund_dev/pages/login.dart';
+import 'package:nordlund_dev/pages/Contact.dart';
+import 'package:nordlund_dev/Login.dart';
 
 void main() {
   runApp(const MyApp());
