@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:nordlund_dev/pages/Contact.dart';
 import 'package:nordlund_dev/Login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +12,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application. 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,6 +33,7 @@ class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -40,11 +42,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashScreenState extends State<SplashScreen> {
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () => {Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const MyHomePage(title: 'Nordlund-dev'))) });
+    Timer(
+        const Duration(seconds: 3),
+        () => {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const MyHomePage(title: 'Nordlund-dev')))
+            });
   }
 
   @override
@@ -79,7 +88,18 @@ class _MyHomePageState extends State<MyHomePage> {
                         MaterialPageRoute(
                             builder: (context) => const Contact()))
                   },
-              child: const Text('Contact'))
+              child: const Text('Contact')),
+          const Padding(padding: EdgeInsets.only(top: 6)),
+          ElevatedButton(
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String _token = prefs.getString('Nordlund-token') ?? 'NO_TOKEN';
+                /**
+                 * DUMP SHARED PREFS
+                 */
+                print('Dumped : $_token');
+              },
+              child: const Text('Dump shared'))
         ]),
       ),
     );

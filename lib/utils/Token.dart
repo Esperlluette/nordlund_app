@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 
@@ -18,37 +20,35 @@ class Token {
 
   void saveToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('Nordlunf-token', _token);
+    prefs.setString('Nordlund-token', _token);
   }
 
-  static Future<Token> importToken() async {
+  static Future<String> importToken() async {
     var prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('nordlund-token') ?? 'NO_TOKEN';
-    return Token(token);
+    return prefs.getString('Nordlund-token') ?? 'NO_TOKEN';
+  }
+
+  static testToken() async {
+    var prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('Nordlund-token') ?? 'NO_TOKEN';
+    inspect(token);
   }
 
   String extractData() {
+    /**
+     * Return the data that the token contains
+     */
     var tokenSplit = _token.split('.');
     return tokenSplit[1];
   }
 
-  String transformToMultiple() {
-    String data = _token;
-    String transformed;
-    if (data.length % 4 != 0) {
-      transformed = transformToMultipleS('${data}0');
-      print(data.length);
-    } else {
-      transformed = data;
-    }
-
-    return transformed;
-  }
-
-  String transformToMultipleS(String s) {
+  static String transformToMultiple(String s) {
+    /**
+     * Use this before decode, this will format token to aquire the requirement
+     */
     String transformed;
     if (s.length % 4 != 0) {
-      transformed = transformToMultipleS('${s}0');
+      transformed = transformToMultiple('${s}0');
       print(s.length);
     } else {
       transformed = s;
@@ -57,8 +57,9 @@ class Token {
     return transformed;
   }
 
-  String witchTokenIs() {
-    List<int> bytes = convert.base64Decode(transformToMultipleS(extractData()));
+  String decode() {
+    /**returns decoded token*/
+    List<int> bytes = convert.base64Decode(transformToMultiple(extractData()));
     String utf8String = convert.utf8.decode(bytes);
     utf8String = utf8String.substring(0, utf8String.length - 1);
     return utf8String;
